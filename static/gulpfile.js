@@ -23,10 +23,10 @@ gulp.task('default', function (callback) {
         },
         resolve: {
           alias: {
-            echarts$: "../echarts/echarts.js",
-            echarts: "../echarts/",
-            zrender$: "../zrender/zrender.js",
-            zrender: "../zrender/"
+            echarts$: __dirname + '/echarts/echarts.js',
+            echarts: __dirname + '/echarts',
+            zrender$: __dirname + '/zrender/zrender.js',
+            zrender: __dirname + '/zrender'
           }
         }
       }, function(err) {
