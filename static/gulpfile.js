@@ -20,6 +20,14 @@ gulp.task('default', function (callback) {
         output: {
           path: __dirname + '/dist',
           filename: 'bundle.js'
+        },
+        resolve: {
+          alias: {
+            echarts$: "../echarts/echarts.js",
+            echarts: "../echarts/",
+            zrender$: "../zrender/zrender.js",
+            zrender: "../zrender/"
+          }
         }
       }, function(err) {
         if (err) throw new Error('webpack', err)

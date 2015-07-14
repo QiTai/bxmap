@@ -5,3 +5,5 @@
 import {BxMap} from './BxMap.js'
 
 let map = new BxMap()
+
+let echarts = require('../echarts/echarts')
