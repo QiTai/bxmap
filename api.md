@@ -5,7 +5,7 @@ API 地址：`TODO`
 
 测试阶段后端请记着开 CORS
 
-# 格式约定
+## 格式约定
 
 后端 API 统一返回 JSON 数据，格式约定如下：
 
@@ -17,11 +17,11 @@ API 地址：`TODO`
 }
 ```
 
-# API 列表
+## API 列表
 
-## `api/uip`
+### `api/uip`
 
-### GET
+#### GET
 
 query:
 
