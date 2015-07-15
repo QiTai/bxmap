@@ -23,17 +23,18 @@ API 地址：`TODO`
 
 #### GET
 
-query:
-
-- time: number. 可选. 请求当天某个小时的数据. 为空时返回当天所有数据.
-
 return:
 
 ```
 [
     {
-        "name": "", // string. 省名称
-        "value": 0 // number. 该省流量
+        "time": 0, // number. 时间
+        "data": [
+            {
+                "name": "", // string. 省名称
+                "value": 0 // number. 该省流量
+            }
+        ]
     }
 ]
 ```
