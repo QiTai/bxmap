@@ -18,7 +18,6 @@ gulp.task('default', function (callback) {
       webpack({
         entry: './dist/main.js',
         output: {
-          path: __dirname + '/dist',
           filename: 'bundle.js'
         },
         resolve: {
