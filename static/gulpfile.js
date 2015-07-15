@@ -27,7 +27,10 @@ gulp.task('default', function (callback) {
             zrender$: __dirname + '/zrender/zrender.js',
             zrender: __dirname + '/zrender'
           }
-        }
+        },
+        plugins: [
+          new webpack.optimize.UglifyJsPlugin({minimize: true})
+        ]
       }, function(err) {
         if (err) throw new Error('webpack', err)
         callback()
