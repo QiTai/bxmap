@@ -1,9 +1,9 @@
 /**
  * Created by imsun on 2015/7/14.
  */
+'use strict'
 
 import {BxMap} from './BxMap.js'
 
-let map = new BxMap()
-
-let echarts = require('../echarts/echarts')
+let bxmap = new BxMap()
+bxmap.init(document.getElementById('map'))
