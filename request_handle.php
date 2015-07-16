@@ -22,7 +22,7 @@ $prov = array("北京", "天津", "上海", "重庆", "河北", "河南", "云�
 $flow = array();
 $proves_flow = array();
 //for($hour = 0; $hour < 24; $hour++)
-for($hour = 21 ; $hour < 24; $hour++)
+for($hour = 0 ; $hour < 24; $hour++)
 {
     $proves_flow[$hour] = array();
 //    $flow[$hour] = array("time" => 0 , "data" => $proves_flow);
