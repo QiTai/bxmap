@@ -7,14 +7,12 @@
  */
 
 
-$conn = @mysql_connect("localhost:3306", "root","") or die('my_connect error:'.mysql_error());
+$conn = @mysql_connect("127.0.0.1:3306", "root","baixing") or die('my_connect error:'.mysql_error());
 
 //mysql_select_db("ip_lib", $conn) or die('mysql_select_db error:'.mysql_error());
-mysql_select_db("utf8_ip_lib", $conn) or die('mysql_select_db error:'.mysql_error());
+mysql_select_db("bxmap", $conn) or die('mysql_select_db error:'.mysql_error());
 
-mysql_query("SET Country 'utf-8'");
-
-mysql_query("SET Prov 'utf-8'");
+mysql_query("set names 'utf8'");		//防止中文变成问号
 
 
 
