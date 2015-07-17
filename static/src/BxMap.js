@@ -6,54 +6,7 @@
 let echarts = require('echarts')
 require('echarts/chart/map')
 
-let mockData = [
-  {name: '北京', value: Math.round(Math.random() * 1000)},
-  {name: '天津', value: Math.round(Math.random() * 1000)},
-  {name: '上海', value: Math.round(Math.random() * 1000)},
-  {name: '重庆', value: Math.round(Math.random() * 1000)},
-  {name: '河北', value: Math.round(Math.random() * 1000)},
-  {name: '河南', value: Math.round(Math.random() * 1000)},
-  {name: '云南', value: Math.round(Math.random() * 1000)},
-  {name: '辽宁', value: Math.round(Math.random() * 1000)},
-  {name: '黑龙江', value: Math.round(Math.random() * 1000)},
-  {name: '湖南', value: Math.round(Math.random() * 1000)},
-  {name: '安徽', value: Math.round(Math.random() * 1000)},
-  {name: '山东', value: Math.round(Math.random() * 1000)},
-  {name: '新疆', value: Math.round(Math.random() * 1000)},
-  {name: '江苏', value: Math.round(Math.random() * 1000)},
-  {name: '浙江', value: Math.round(Math.random() * 1000)},
-  {name: '江西', value: Math.round(Math.random() * 1000)},
-  {name: '湖北', value: Math.round(Math.random() * 1000)},
-  {name: '广西', value: Math.round(Math.random() * 1000)},
-  {name: '甘肃', value: Math.round(Math.random() * 1000)},
-  {name: '山西', value: Math.round(Math.random() * 1000)},
-  {name: '内蒙古', value: Math.round(Math.random() * 1000)},
-  {name: '陕西', value: Math.round(Math.random() * 1000)},
-  {name: '吉林', value: Math.round(Math.random() * 1000)},
-  {name: '福建', value: Math.round(Math.random() * 1000)},
-  {name: '贵州', value: Math.round(Math.random() * 1000)},
-  {name: '广东', value: Math.round(Math.random() * 1000)},
-  {name: '青海', value: Math.round(Math.random() * 1000)},
-  {name: '西藏', value: Math.round(Math.random() * 1000)},
-  {name: '四川', value: Math.round(Math.random() * 1000)},
-  {name: '宁夏', value: Math.round(Math.random() * 1000)},
-  {name: '海南', value: Math.round(Math.random() * 1000)},
-  {name: '台湾', value: Math.round(Math.random() * 1000)},
-  {name: '香港', value: Math.round(Math.random() * 1000)},
-  {name: '澳门', value: Math.round(Math.random() * 1000)}
-]
-let pv = {
-  name: 'PV',
-  type: 'map',
-  mapType: 'china',
-  roam: false,
-  itemStyle: {
-    normal: {label: {show: true}},
-    emphasis: {label: {show: true}}
-  },
-  data: mockData
-}
-let defaultOption = {
+let optionTemplate = {
   title: {
     text: '24 小时访问量',
     subtext: 'baixing.com',
@@ -61,19 +14,6 @@ let defaultOption = {
   },
   tooltip: {
     trigger: 'item'
-  },
-  legend: {
-    orient: 'vertical',
-    x: 'left',
-    data: ['PV']
-  },
-  dataRange: {
-    min: 0,
-    max: 2500,
-    x: 'left',
-    y: 'bottom',
-    text: ['高', '低'],          // 文本，默认为数值文本
-    calculable: true
   },
   toolbox: {
     show: true,
@@ -88,31 +28,94 @@ let defaultOption = {
     }
   },
   roamController: {
-    show: true,
-    x: 'right',
-    mapTypeControl: {
-      'china': true
-    }
+   show: true,
+   x: 'right',
+   mapTypeControl: {
+     'china': true
+   }
   },
-  series: [pv]
+  dataRange: {
+    text:['峰值', '低'],           // 文本，默认为数值文本
+    calculable : true,
+    x: 'left',
+    min: 0,
+    max: 1000
+  },
+  series: []
+}
+
+class Option {
+  constructor(data) {
+    let self = this
+    Object.assign(this, optionTemplate, {
+      dataRange: {
+       text:['峰值', '低'],           // 文本，默认为数值文本
+       calculable : true,
+       x: 'left',
+       min: 0,
+       get max() {
+         return  Math.max.apply(null, self.series.map((dataSeries) => {
+           return Math.max.apply(null, dataSeries.data.map((row) => {
+             return row.value
+           }))
+         }))
+       }
+      },
+      series: [{
+        name: 'PV',
+        type: 'map',
+        mapType: 'china',
+        roam: false,
+        itemStyle: {
+          normal: {label: {show: true}},
+          emphasis: {label: {show: true}}
+        },
+        data
+      }]
+    })
+  }
+}
+let defaultOption = {
+  timeline: {
+    data: [],
+    label: {
+      formatter: function(s) {
+        return parseInt(s.slice(2, 4), 10) + ' 时'
+      }
+    },
+    autoPlay: false,
+    playInterval : 1000
+  }
 }
 
 export class BxMap {
   constructor(option = {}) {
     this.option = {}
-    this.setOption(this.option, option)
+    Object.assign(this.option, defaultOption, option)
   }
   init(domElement) {
     this.chart = echarts.init(domElement)
-    this.chart.setOption(this.option)
+    this.update()
   }
-  setOption(option) {
-    Object.assign(this.option, defaultOption, option)
-    this.option.dataRange.max = Math.max.apply(null, this.option.series.map((dataSeries) => {
-      return Math.max.apply(null, dataSeries.data.map((row) => {
-        return row.value
-      }))
-    }))
+  update() {
+    let httpRequest = new XMLHttpRequest()
+    httpRequest.onreadystatechange = () => {
+      if (httpRequest.readyState === 4) {
+        if (httpRequest.status === 200) {
+          this.setData(JSON.parse(httpRequest.responseText).data)
+        } else {}
+      } else {}
+    }
+    httpRequest.open('GET', 'http://192.168.100.54/json.php', true)
+    httpRequest.send()
+  }
+  setData(data) {
+    this.option.timeline.data = data.map(item => '20' + (item.time < 10 ? '0' + item.time : item.time) + '-01-01')
+    this.option.options = data.map(item => new Option(item.data))
+    this.setOption()
+  }
+  setOption(option = {}) {
+    Object.assign(this.option, option)
     if (this.chart) this.chart.setOption(this.option)
   }
 }
