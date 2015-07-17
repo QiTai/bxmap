@@ -35,11 +35,11 @@ let optionTemplate = {
    }
   },
   dataRange: {
-    text:['峰值', '低'],           // 文本，默认为数值文本
+    text:['峰值', ''],           // 文本，默认为数值文本
     calculable : true,
     x: 'left',
     min: 0,
-    max: 1000
+    max: 10000
   },
   series: []
 }
@@ -49,17 +49,10 @@ class Option {
     let self = this
     Object.assign(this, optionTemplate, {
       dataRange: {
-       text:['峰值', '低'],           // 文本，默认为数值文本
+       text:['峰值', ''],           // 文本，默认为数值文本
        calculable : true,
        x: 'left',
-       min: 0,
-       get max() {
-         return  Math.max.apply(null, self.series.map((dataSeries) => {
-           return Math.max.apply(null, dataSeries.data.map((row) => {
-             return row.value
-           }))
-         }))
-       }
+       min: 0
       },
       series: [{
         name: 'PV',
@@ -112,6 +105,11 @@ export class BxMap {
   setData(data) {
     this.option.timeline.data = data.map(item => '20' + (item.time < 10 ? '0' + item.time : item.time) + '-01-01')
     this.option.options = data.map(item => new Option(item.data))
+    this.option.options[0].dataRange.max = Math.max.apply(null, data.map(times => {
+      return Math.max.apply(null, times.data.map((row) => {
+        return row.value
+      }))
+    }))
     this.setOption()
   }
   setOption(option = {}) {
