@@ -19,6 +19,7 @@ gulp.task('default', function (callback) {
         entry: './dist/main.js',
         output: {
           filename: 'bundle.js'
+
         },
         resolve: {
           alias: {
@@ -29,7 +30,7 @@ gulp.task('default', function (callback) {
           }
         },
         plugins: [
-          new webpack.optimize.UglifyJsPlugin({minimize: true})
+         //new webpack.optimize.UglifyJsPlugin({minimize: true})
         ]
       }, function(err) {
         if (err) throw new Error('webpack', err)
