@@ -20,7 +20,7 @@ function BinarySearch($search_ip){
 		if($search_ip > $iplist[$current][1]) $low=$current;
 		else $high=$current;
 	}
-	echo $search_ip."<br>";
+	// echo $search_ip."<br>";
 	return 0;
 	
 

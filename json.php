@@ -6,7 +6,8 @@
  * Time: 19:29
  */
 
-header("Content-type: text/html; charset=utf-8");
+header("Content-type: application/json; charset=utf-8");
+header("Access-Control-Allow-Origin:*");
 
 //store the web_traffic into database web_traffic;
 include "conn.php";
@@ -19,7 +20,6 @@ $prov = array("北京", "天津", "上海", "重庆", "河北", "河南", "云�
 
 $flow = array();
 $proves_flow = array();
-//for($hour = 0; $hour < 24; $hour++)
 for($hour = 0 ; $hour < 24; $hour++)
 {
     $proves_flow[$hour] = array();

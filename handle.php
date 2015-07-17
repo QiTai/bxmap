@@ -44,7 +44,6 @@ foreach ($data as $each) {
                 $flow[$hour][$prov_name]++;
                 break;
     		}
-
         }
     }
     $index++;
